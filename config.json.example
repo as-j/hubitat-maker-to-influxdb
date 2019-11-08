@@ -1,0 +1,18 @@
+{
+    "local_config" : {
+    },
+    "hubs" : {
+        "homeTester": {
+            "url": "http://192.168.7.100/apps/api/13",
+            "token":  "<ACCESS_TOKEN>",
+            "influxdb_db_name": "HubitatTester"
+        },
+        "home": {
+            "url": "http://192.168.7.97/apps/api/769",
+            "token": "<ACCESS_TOKEN>",
+            "locationName": "Home",
+            "locationId": "0",
+            "hubId": "0"
+        }
+    }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "hubitat-maker-to-influxdb",
+  "version": "0.1.0",
+  "description": "Hubitat MakerAPI to InfluxDB Statistics/Logging/Graphing Tool",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/as-j/hubitat-maker-to-influxdb.git"
+  },
+  "keywords": [
+    "Hubitat",
+    "Maker",
+    "InfluxDB",
+    "MakerAPI"
+  ],
+  "author": "Andrew Stanley-Jones",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/as-j/hubitat-maker-to-influxdb/issues"
+  },
+  "homepage": "https://github.com/as-j/hubitat-maker-to-influxdb#readme",
+  "dependencies": {
+    "request": "^2.88.0",
+    "urlencode": "^1.1.0"
+  }
+}
