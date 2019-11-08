@@ -5,9 +5,7 @@ This is very alpha, and there's many places it may crash.  Running from pm2 so i
 How to Use:
 
 1. On the Hubitat install a new instance of the MakerAPI
-1. Select devices you want to log data from. Ex:
-  1. Motion Sensors that send temperature data
-  1. Power or energy use sensors
+1. Select devices you want to log data from. Ex: Motion Sensors that send temperature data, power or energy sensors
 1. Create a config.json described below for each hub
 1. Install influxdb locally and bind it to 127.0.0.1, don't turn on auth
 1. Run hubitat-maker-to-influxdb
@@ -19,6 +17,12 @@ An example is:
 ```
 {
     "local_config" : {
+        "local_url": "http://<ip address of nodejs server>"
+        "hostname":  "0.0.0.0",
+        "base_port": 8567,
+        "influxdb_port": 8086,
+        "influxdb_host": "127.0.0.1",
+        "influxdb_db_name": "hubitatMaker",
     },
     "hubs" : {
         "homeTester": {
