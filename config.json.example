@@ -1,5 +1,11 @@
 {
     "local_config" : {
+        "hostname":  "0.0.0.0",
+        "base_port": 8567,
+        "influxdb_port": 8086,
+        "influxdb_host": "127.0.0.1",
+        "influxdb_db_name": "hubitatMaker",
+        "local_url": "http://192.168.7.94"
     },
     "hubs" : {
         "homeTester": {
