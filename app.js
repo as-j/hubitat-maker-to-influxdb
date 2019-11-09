@@ -19,6 +19,7 @@ var config = {
         influxdb_host: '127.0.0.1',
         influxdb_db_name: 'hubitatMaker',
         local_url: 'http://192.168.7.94',
+        poll_interval: 1800,
     },
     hubs: {
     }
@@ -51,6 +52,7 @@ Object.keys(config.hubs).forEach((hubName) => {
 function instance(hubName, hub, port) {
 
     var stats = {};
+    var poll_timers = {};
 
     const local_url = `${config.local_config.local_url}:${port}/`;
     console.log(hubName, "local_url", local_url);
@@ -190,32 +192,44 @@ function instance(hubName, hub, port) {
         windowShade: { truth: 'closed', },
     };
 
-    function process_event(evt) {
-        //console.log(hubName, 'json:', evt);
+    function process_event(evt, repeat) {
+        console.log(hubName, 'json:', evt);
 
         if (!stats[evt.displayName]) stats[evt.displayName] = 0;
         stats[evt.displayName] += 1;
         stats._totalEvents += 1;
+        
+        var deviceId = evt.deviceId;
+        if (!deviceId) deviceId = 0;
+
+        const evt_uniq_string = `${deviceId}-${evt.name}`;
+        console.log(hubName, 'evt_uniq_string', evt_uniq_string);
+        if (poll_timers[evt_uniq_string]) clearTimeout(poll_timers[evt_uniq_string]);
+        poll_timers[evt_uniq_string] = setTimeout(() => {
+            // I don't know if clearTimeout on a timeout that's
+            // being run could be bad, so perhaps is ok?
+            poll_timers[evt_uniq_string] = null;
+            process_event(evt, "repeat");
+        }, config.local_config.poll_interval*1000); 
 
         // Build data string to send to InfluxDB:
         //  Format: <measurement>[,<tag_name>=<tag_value>] field=<field_value>
         //    If value is an integer, it must have a trailing "i"
         //    If value is a string, it must be enclosed in double quotes.
         var measurement = evt.name;
-        var deviceId = evt.deviceId;
-        if (!deviceId) deviceId = 0;
         // tags:
         var deviceId = escapeStringForInfluxDB(deviceId.toString());
-        var deviceName = escapeStringForInfluxDB(evt.displayName);
-        var hubNameEsc = escapeStringForInfluxDB(hubName);
-        var hubId = escapeStringForInfluxDB(hub.hubId);
-        var locationId = escapeStringForInfluxDB(hub.locationId);
-        var locationName = escapeStringForInfluxDB(hub.locationName);
-        var unit = escapeStringForInfluxDB(evt.unit);
-        var value = escapeStringForInfluxDB(evt.value);
+        const deviceName = escapeStringForInfluxDB(evt.displayName);
+        const hubNameEsc = escapeStringForInfluxDB(hubName);
+        const hubId = escapeStringForInfluxDB(hub.hubId);
+        const locationId = escapeStringForInfluxDB(hub.locationId);
+        const locationName = escapeStringForInfluxDB(hub.locationName);
+        const unit = escapeStringForInfluxDB(evt.unit);
+        const value = escapeStringForInfluxDB(evt.value);
+        const is_repeat = escapeStringForInfluxDB((repeat) ? 'true' : 'false');
         var valueBinary = '';
         
-        var data = `${measurement},deviceId=${deviceId},deviceName=${deviceName},hubName=${hubNameEsc},hubId=${hubId},locationId=${locationId},locationName=${locationName}`;
+        var data = `${measurement},deviceId=${deviceId},deviceName=${deviceName},hubName=${hubNameEsc},hubId=${hubId},locationId=${locationId},locationName=${locationName},repeat=${is_repeat}`;
 
         if (boolTypes[evt.name]) {
             data += hubDefaultBool(evt.name, evt.value, boolTypes[evt.name].truth);
