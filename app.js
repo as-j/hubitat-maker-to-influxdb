@@ -219,13 +219,13 @@ function instance(hubName, hub, port) {
         var measurement = evt.name;
         // tags:
         var deviceId = escapeStringForInfluxDB(deviceId.toString());
+        var unit = escapeStringForInfluxDB(evt.unit);
+        var value = escapeStringForInfluxDB(evt.value);
         const deviceName = escapeStringForInfluxDB(evt.displayName);
         const hubNameEsc = escapeStringForInfluxDB(hubName);
         const hubId = escapeStringForInfluxDB(hub.hubId);
         const locationId = escapeStringForInfluxDB(hub.locationId);
         const locationName = escapeStringForInfluxDB(hub.locationName);
-        const unit = escapeStringForInfluxDB(evt.unit);
-        const value = escapeStringForInfluxDB(evt.value);
         const is_repeat = escapeStringForInfluxDB((repeat) ? 'true' : 'false');
         var valueBinary = '';
         
