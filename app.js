@@ -57,6 +57,7 @@ function instance(hubName, hub, port) {
     const local_url = `${config.local_config.local_url}:${port}/`;
     console.log(hubName, "local_url", local_url);
     const local_url_encoded = urlencode(local_url);
+    console.log(hubName, "Local url encoded", local_url_encoded);
 
     const post_to = `${hub.url}/postURL/${local_url_encoded}?access_token=${hub.token}`;
     console.log(hubName, "post_to", post_to);
@@ -81,10 +82,8 @@ function instance(hubName, hub, port) {
     });
 
     server.listen(port, config.local_config.hostname, () => {
-          console.log(hubName, `Server running at http://${config.local_config.hostname}:${config.local_config.port}/`);
-          console.log(hubName, `Local url ${local_url}`);
-          console.log(hubName, `Local url encoded ${local_url_encoded}`);
-          console.log(hubName, `Sending post to: ${post_to}`);
+          console.log(hubName, `Server running at http://${config.local_config.hostname}:${port}/`);
+          console.log(hubName, 'Calling Maker API with:', post_to);
           request(post_to, (error, responce, body) => {
               if (error) console.error('error:', error);
               console.log(hubName, 'statusCode:', responce && responce.statusCode);
@@ -246,6 +245,10 @@ function instance(hubName, hub, port) {
             var valueY = valueXYZ[1];
             var valueZ = valueXYZ[2];
             data += `,unit=${unit} valueX=${valueX}i,valueY=${valueY}i,valueZ=${valueZ}i`; // values are integers.;
+        }
+        else if('systemStart' == evt.name) {
+            value = repeat ? '0i' : '1i';
+            data += ` value=${value}`;
         }
         // Catch any other event with a string value that hasn't been handled:
         else if (evt.value.match(/[^0-9\.,-]/)) { // match if any characters are not digits, period, comma, or hyphen.
