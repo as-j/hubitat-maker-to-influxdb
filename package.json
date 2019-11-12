@@ -17,7 +17,7 @@
     "MakerAPI"
   ],
   "author": "Andrew Stanley-Jones",
-  "license": "GPL-2.0",
+  "license": "APL-2.0",
   "bugs": {
     "url": "https://github.com/as-j/hubitat-maker-to-influxdb/issues"
   },
