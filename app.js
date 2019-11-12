@@ -46,10 +46,12 @@ function instance(hubName, hub, port) {
         request.on('end', () => {
             //console.log(hubName, 'body:', body);
             const jsonParsed = JSON.parse(body);
-            process_event(jsonParsed.content);
             res.end('Done!\n');
+            process_event_stats(jsonParsed.content);
         });
     });
+
+    server.keepAliveTimeout = 5*60*1000;
 
     server.listen(port, config.local_config.hostname, () => {
           console.log(hubName, `Server running at http://${config.local_config.hostname}:${port}/`);
@@ -61,12 +63,13 @@ function instance(hubName, hub, port) {
           });
     });
 
-    function process_event(evt, repeat) {
+    function process_event_stats(evt, repeat) {
         console.log(hubName, 'json:', evt);
         stats.deviceEvents[evt.displayName] = (stats.deviceEvents[evt.displayName] || 0) + 1;
         stats.measurementEvents[evt.name] = (stats.measurementEvents[evt.name] || 0) + 1;
         const combined = `${evt.displayName} ${evt.name}`;
         stats.deviceMeasurementEvents[combined] = (stats.deviceMeasurementEvents[combined] || 0) + 1;
+
         session.processEvt(evt, repeat);
     }
 
