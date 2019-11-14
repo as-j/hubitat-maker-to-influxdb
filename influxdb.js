@@ -35,6 +35,7 @@ const boolTypes = {
     hsmSetArm: { truth: 'armAway', },
     hsmStatus: { truth: 'armedAway', },
     hsmAlert: { truth: 'intrusion', },
+    hsmRules: { truth: 'disarmedRule', },
     lock: { truth: 'locked', },
     mode: { truth: 'Away', },
     motion: { truth: 'active', },
@@ -83,7 +84,7 @@ function new_session(hubName, hub, config) {
             // I don't know if clearTimeout on a timeout that's
             // being run could be bad, so perhaps is ok?
             poll_timers[evt_uniq_string] = null;
-            process_event(evt, "repeat");
+            processEvt(evt, "repeat");
         }, config.local_config.poll_interval*1000); 
 
         // Build data string to send to InfluxDB:
@@ -163,6 +164,7 @@ function new_session(hubName, hub, config) {
         postTimer = setTimeout( () => {
             const sendData = postQueue;
             postQueue = [];
+            postTimer.unref();
             postTimer = null;
 
             var db_name = hub.influxdb_db_name;
