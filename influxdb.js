@@ -26,11 +26,11 @@ function isBoolType(evt_name) {
 
 const boolTypes = {
     acceleration: { truth: 'active', },
-    alarm: { thruth: 'off', },
+    alarm: { truth: 'off', },
     button: { truth: 'pushed', },
     carbonMonoxide: { truth: 'detected', },
     consumableStatus: { truth: 'good', },
-    contact: { truth: 'closted', },
+    contact: { truth: 'closed', },
     door: { truth: 'closed', },
     hsmSetArm: { truth: 'armAway', },
     hsmStatus: { truth: 'armedAway', },

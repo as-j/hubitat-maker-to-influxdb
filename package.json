@@ -1,6 +1,6 @@
 {
   "name": "hubitat-maker-to-influxdb",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Hubitat MakerAPI to InfluxDB Statistics/Logging/Graphing Tool",
   "main": "app.js",
   "scripts": {
