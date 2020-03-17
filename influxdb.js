@@ -15,9 +15,9 @@ function escapeString(string) {
 
 function hubDefaultBool(name, value, truth) {
     var unit = name;
-    value = '"' + value + '"';
     var valueBinary = (truth == value) ? '0i' : '1i';
-    return `,unit=${unit} value=${value},valueBinary=${valueBinary}`;
+    q_value = '"' + value + '"';
+    return `,unit=${unit} value=${q_value},valueBinary=${valueBinary}`;
 }
 
 function isBoolType(evt_name) {
