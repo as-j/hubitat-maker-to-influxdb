@@ -45,9 +45,13 @@ function instance(hubName, hub, port) {
         });
         request.on('end', () => {
             //console.log(hubName, 'body:', body);
-            const jsonParsed = JSON.parse(body);
+            try {
+                const jsonParsed = JSON.parse(body);
+                process_event_stats(jsonParsed.content);
+            } catch (e) {
+                console.log(hubName, 'Failed to parse json from hubitat: ', body);
+            }
             res.end('Done!\n');
-            process_event_stats(jsonParsed.content);
         });
     });
 
